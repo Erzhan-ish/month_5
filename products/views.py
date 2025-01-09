@@ -19,7 +19,7 @@ def product_detail_api_view(request, id):
 @api_view(http_method_names=['GET'])
 def product_list_api_view(request):
     # step 1: Collect all products from DB (QuerySet)
-    products = Product.objects.all()
+    products = Product.objects.select_related('category').prefetch_related('search_words', 'reviews').all()
 
     # step 2: Reformat (Serialize) QuerySet to list of dictionary
     list = ProductSerializer(instance=products, many=True).data
